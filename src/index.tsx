@@ -18,10 +18,12 @@ export interface HookConfig extends AxiosRequestConfig {
   skip?: () => boolean;
 }
 
+export type HookReturnValue = [ReducerState<any>, () => void];
+
 function useAxios(
   { skip = () => false, ...config }: HookConfig,
   dependencyList: DependencyList
-): [ReducerState<any>, () => void] {
+): HookReturnValue {
   const [source, setSource] = useState(axios.CancelToken.source());
   const [retry, setRetry] = useState(false);
   const [prevDepList, setPrevDepList] = useState(dependencyList);
@@ -36,12 +38,16 @@ function useAxios(
       const res = await axios({ ...config, cancelToken: token });
       dispatch({ type: 'SUCCESS', payload: res.data });
     } catch (error) {
-      dispatch({ type: 'ERROR', payload: error });
+      let payload = error;
+      if (!(error instanceof Error) && error.message === 'Cancel') {
+        payload = 'request cancelled';
+      }
+      dispatch({ type: 'ERROR', payload });
     }
   }, [config, dispatch]);
 
   useEffect(() => {
-    if (skip()) return dispatch({ type: 'IDLE' });
+    if (skip()) return;
     for (let i = 0; i < prevDepList.length && i < dependencyList.length; i++) {
       if (prevDepList[i] === dependencyList[i]) {
         setPrevDepList(dependencyList);
@@ -51,19 +57,19 @@ function useAxios(
     }
     makeRequest();
     return () => {
-      source && source.cancel('request cancelled');
+      source && source.cancel();
+      dispatch({ type: 'ERROR', payload: 'request cancelled' });
     };
   }, [...dependencyList]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (retry === false) return;
     setRetry(false);
-    dispatch({ type: 'IDLE' });
     makeRequest();
-    return () => {
-      source && source.cancel('request cancelled');
-    };
+    return () => source && source.cancel();
   }, [retry]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const rerun = () => setRetry(true);
 
   return [
     {
@@ -71,7 +77,7 @@ function useAxios(
       error,
       loading,
     },
-    () => setRetry(true),
+    rerun,
   ];
 }
 

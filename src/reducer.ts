@@ -1,16 +1,15 @@
 import { useReducer } from 'react';
 
-export interface ReducerState<T> {
+export interface ReducerState<T = any> {
   data: T | undefined;
   loading: boolean;
-  error: Error | undefined;
+  error: Error | string | undefined;
 }
 
-export type ReducerAction<T> =
-  | { type: 'IDLE' }
+export type ReducerAction<T = any> =
   | { type: 'LOADING' }
   | { type: 'SUCCESS'; payload: T }
-  | { type: 'ERROR'; payload: Error };
+  | { type: 'ERROR'; payload: Error | string };
 
 export const initialState = {
   data: undefined,
@@ -18,16 +17,11 @@ export const initialState = {
   loading: false,
 };
 
-function reducer<T>(
+function reducer<T = any>(
   state: ReducerState<T>,
   action: ReducerAction<T>
 ): ReducerState<T> {
   switch (action.type) {
-    case 'IDLE':
-      return {
-        ...state,
-        loading: false,
-      };
     case 'LOADING':
       return {
         ...state,
