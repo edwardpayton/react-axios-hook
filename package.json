@@ -2,7 +2,7 @@
   "name": "@ejp/react-hook-axios",
   "author": "Edward Payton",
   "description": "A small utility hook to use Axios in your React components, built with TypeScript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
