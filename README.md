@@ -9,7 +9,7 @@
 <img src="https://badgen.net/npm/types/@ejp/react-hook-axios"/>
 </a>
 <a href="https://packagephobia.now.sh/result?p=@ejp/react-hook-axios">
-<img src="https://badgen.net/packagephobia/install/@ejp/react-hook-axios" /> 
+<img src="https://badgen.net/packagephobia/min/@ejp/react-hook-axios" /> 
 </a>
 <a href="https://circleci.com/gh/edwardpayton/react-axios-hook">
 <img src="https://badgen.net/circleci/github/edwardpayton/react-axios-hook"/> 
