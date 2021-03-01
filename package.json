@@ -38,7 +38,7 @@
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "axios": "^0.20.0",
-    "husky": "^4.0.7",
+    "husky": "^5.1.2",
     "jest-mock-axios": "^4.2.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
